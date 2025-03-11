@@ -2,7 +2,7 @@
   "id": "BrandonE",
   "name": "BrandonE's Jokers",
   "author": ["BrandonE", "Various"],
-  "description": "BrandonE's implementation of Joker ideas from various other users.",
+  "description": "BrandonE's Jokers and credited implementations of Joker ideas from various other players.",
   "prefix": "BrandonE",
   "main_file": "BrandonE.lua",
   "dependencies": [

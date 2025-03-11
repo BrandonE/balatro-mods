@@ -20,7 +20,7 @@ SMODS.Joker {
   },
 
   unlocked = true,
-  rarity = 2, -- Uncommon
+  rarity = 10, -- Rare
   atlas = 'ModdedVanilla',
   pos = { x = 0, y = 0 },
   cost = 4,
@@ -56,6 +56,9 @@ SMODS.Joker {
       local last_joker = G.jokers.cards[#G.jokers.cards]
 
       if last_joker and last_joker ~= card then
+        -- Without the lines containing context.blueprint, Obelisk would get an additional X0.2 Mult when duplicated.
+        -- With these lines, Obelisk will not be reset if it is being duplicated.
+        -- Neither of these are correct. TODO: Fix.
         context.blueprint = (context.blueprint and (context.blueprint + 1)) or 1
         context.blueprint_card = context.blueprint_card or card
         if context.blueprint > #G.jokers.cards + 1 then return end
