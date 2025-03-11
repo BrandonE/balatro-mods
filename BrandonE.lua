@@ -24,7 +24,7 @@ SMODS.Joker {
   unlocked = true,
   rarity = 3, -- Rare
   atlas = 'ModdedVanilla',
-  pos = { x = 0, y = 0 },
+  pos = { x = 1, y = 0 },
   cost = 10,
   calculate = function(self, card, context)
     if context.before then
