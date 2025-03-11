@@ -14,7 +14,9 @@ SMODS.Joker {
   loc_txt = {
     name = 'Dunce',
     text = {
-      "Copies the ability of the rightmost {C:attention}Joker{} and disables {C:attention}Joker{} to the right",
+      "Copies the ability of the",
+      "rightmost {C:attention}Joker{} and",
+      "disables {C:attention}Joker{} to the right",
       "{C:inactive}By u/Spicy_burritos"
     }
   },
@@ -51,23 +53,10 @@ SMODS.Joker {
       }))
     end
 
-    if context.cardarea == G.jokers then
-      local last_joker = G.jokers.cards[#G.jokers.cards]
+    local last_joker = G.jokers.cards[#G.jokers.cards]
 
-      if last_joker and last_joker ~= card then
-        -- Without the lines containing context.blueprint, Obelisk would get an additional X0.2 Mult when duplicated.
-        -- With these lines, Obelisk will not be reset if it is being duplicated.
-        -- Neither of these are correct. TODO: Fix.
-        context.blueprint = (context.blueprint and (context.blueprint + 1)) or 1
-        context.blueprint_card = context.blueprint_card or card
-        if context.blueprint > #G.jokers.cards + 1 then return end
-        local last_joker_ret = last_joker:calculate_joker(context)
-
-        if last_joker_ret then
-          last_joker_ret.card = context.blueprint_card or card
-          return last_joker_ret
-        end
-      end
+    if last_joker and last_joker ~= card then
+      return SMODS.blueprint_effect(card, last_joker, context)
     end
   end
 }
