@@ -20,10 +20,10 @@ SMODS.Joker {
   },
 
   unlocked = true,
-  rarity = 10, -- Rare
+  rarity = 3, -- Rare
   atlas = 'ModdedVanilla',
   pos = { x = 0, y = 0 },
-  cost = 4,
+  cost = 10,
   calculate = function(self, card, context)
     if context.before then
       for i = 1, #G.jokers.cards do
@@ -41,13 +41,12 @@ SMODS.Joker {
 
     if context.final_scoring_step then
       G.E_MANAGER:add_event(Event({
-        blocking = false,
-        no_delete = true,
         func = function()
           if card.ability["debuffed_card"] then
             card.ability["debuffed_card"]:set_debuff(false)
-            return true
           end
+
+          return true
         end
       }))
     end
