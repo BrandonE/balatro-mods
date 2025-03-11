@@ -52,14 +52,19 @@ SMODS.Joker {
       }))
     end
 
-    local last_joker = G.jokers.cards[#G.jokers.cards]
+    if context.cardarea == G.jokers then
+      local last_joker = G.jokers.cards[#G.jokers.cards]
 
-    if last_joker and last_joker ~= card then
-      local last_joker_ret = last_joker:calculate_joker(context)
+      if last_joker and last_joker ~= card then
+        context.blueprint = (context.blueprint and (context.blueprint + 1)) or 1
+        context.blueprint_card = context.blueprint_card or card
+        if context.blueprint > #G.jokers.cards + 1 then return end
+        local last_joker_ret = last_joker:calculate_joker(context)
 
-      if last_joker_ret then
-        last_joker_ret.card = card
-        return last_joker_ret
+        if last_joker_ret then
+          last_joker_ret.card = context.blueprint_card or card
+          return last_joker_ret
+        end
       end
     end
   end
