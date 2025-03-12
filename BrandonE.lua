@@ -1,8 +1,8 @@
 SMODS.Atlas {
   -- Key for code to find it with
-  key = "ModdedVanilla",
+  key = "BrandonE",
   -- The name of the file, for the code to pull the atlas from
-  path = "ModdedVanilla.png",
+  path = "BrandonE.png", -- Original file sourced from https://github.com/Steamodded/examples/tree/master/Mods/ExampleJokersMod/assets
   -- Width of each sprite in 1x size
   px = 71,
   -- Height of each sprite in 1x size
@@ -22,8 +22,9 @@ SMODS.Joker {
   },
 
   unlocked = true,
+  discovered = true,
   rarity = 3, -- Rare
-  atlas = 'ModdedVanilla',
+  atlas = 'BrandonE',
   pos = { x = 1, y = 0 },
   cost = 10,
   calculate = function(self, card, context)
@@ -76,20 +77,21 @@ SMODS.Joker {
 
   config = { extra = { x_mult = 1, x_mult_gain = 0.4 } },
   unlocked = true,
+  discovered = true,
   rarity = 3, -- Rare
-  atlas = 'ModdedVanilla',
+  atlas = 'BrandonE',
   pos = { x = 0, y = 0 },
   cost = 10,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.x_mult, card.ability.extra.x_mult_gain } }
-	end,
+  loc_vars = function(self, info_queue, card)
+  return { vars = { card.ability.extra.x_mult, card.ability.extra.x_mult_gain } }
+  end,
   calculate = function(self, card, context)
-		if context.joker_main and card.ability.extra.x_mult > 1 then
-			return {
-				Xmult_mod = card.ability.extra.x_mult,
-				message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.x_mult } }
-			}
-		end
+    if context.joker_main and card.ability.extra.x_mult > 1 then
+      return {
+        Xmult_mod = card.ability.extra.x_mult,
+        message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.x_mult } }
+      }
+    end
 
     if context.final_scoring_step then
       G.E_MANAGER:add_event(Event({
@@ -121,6 +123,47 @@ SMODS.Joker {
       elseif card.ability.extra.x_mult > 1 then
         card.ability.extra.x_mult = 1
         return { message = localize('k_reset') }
+      end
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'shift_lead',
+  loc_txt = {
+    name = 'Shift Lead',
+    text = {
+      "{X:mult,C:white} X#1# {} Mult Before {C:attention}9AM{},",
+      "After {C:attention}5PM{}, Or From {C:attention}12-1PM{}",
+      "{X:mult,C:white} X#2# {} Mult Otherwise"
+    }
+  },
+
+  config = { extra = { x_mult = 1.5, x_mult_work = 0 } },
+  unlocked = true,
+  discovered = true,
+  rarity = 2, -- Rare
+  atlas = 'BrandonE',
+  pos = { x = 0, y = 0 },
+  cost = 5,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.x_mult, card.ability.extra.x_mult_work } }
+  end,
+  calculate = function(self, card, context)
+    if context.joker_main then
+      local current_time = os.date("*t", os.time())
+      local current_hour = current_time.hour
+
+      if current_hour >= 9 and current_hour < 17 and current_hour ~= 12 then
+        return {
+          Xmult_mod = card.ability.extra.x_mult_work,
+          message = "Get To Work!"
+        }
+      else
+        return {
+          Xmult_mod = card.ability.extra.x_mult,
+          message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.x_mult } }
+        }
       end
     end
   end
