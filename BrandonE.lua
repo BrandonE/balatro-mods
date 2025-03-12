@@ -35,7 +35,7 @@ SMODS.Joker {
 
           if next_joker then
             next_joker:set_debuff(true)
-            card.ability["debuffed_card"] = next_joker
+            card.ability.debuffed_card = next_joker
           end
         end
       end
@@ -44,8 +44,8 @@ SMODS.Joker {
     if context.final_scoring_step then
       G.E_MANAGER:add_event(Event({
         func = function()
-          if card.ability["debuffed_card"] then
-            card.ability["debuffed_card"]:set_debuff(false)
+          if card.ability.debuffed_card then
+            card.ability.debuffed_card:set_debuff(false)
           end
 
           return true
@@ -57,6 +57,71 @@ SMODS.Joker {
 
     if last_joker and last_joker ~= card then
       return SMODS.blueprint_effect(card, last_joker, context)
+    end
+  end
+}
+
+SMODS.Joker {
+  key = 'hot_streak',
+  loc_txt = {
+    name = 'Hot Streak',
+    text = {
+      "This Joker gains {C:mult}X#2#{} Mult",
+      "per consecutive hand played",
+      "that sets the score on fire",
+      "{C:inactive}(Currently {C:mult}X#1#{})",
+      "{C:inactive}By u/Sample_text_here1337"
+    }
+  },
+
+  config = { extra = { x_mult = 1, x_mult_gain = 0.4 } },
+  unlocked = true,
+  rarity = 3, -- Rare
+  atlas = 'ModdedVanilla',
+  pos = { x = 0, y = 0 },
+  cost = 10,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.x_mult, card.ability.extra.x_mult_gain } }
+	end,
+  calculate = function(self, card, context)
+		if context.joker_main and card.ability.extra.x_mult > 1 then
+			return {
+				Xmult_mod = card.ability.extra.x_mult,
+				message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.x_mult } }
+			}
+		end
+
+    if context.final_scoring_step then
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          card.ability.current_hand_chips = G.GAME.current_round.current_hand.chips
+          card.ability.current_hand_mult = G.GAME.current_round.current_hand.mult
+
+          return true
+        end
+      }))
+    end
+
+    if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint and card.ability.current_hand_chips and card.ability.current_hand_mult then
+      local chips = card.ability.current_hand_chips
+      local mult = card.ability.current_hand_mult
+      local required_score = G.ARGS.score_intensity.required_score
+
+      if G.GAME.selected_back:get_name() == "Plasma Deck" then
+        local total = chips + mult
+        chips = math.floor(total / 2)
+        mult = math.floor(total / 2)
+      end
+
+      local score = chips * mult
+
+      if score >= required_score and required_score > 0 then
+        card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_gain
+        return { message = "Upgraded!" }
+      elseif card.ability.extra.x_mult > 1 then
+        card.ability.extra.x_mult = 1
+        return { message = localize('k_reset') }
+      end
     end
   end
 }
