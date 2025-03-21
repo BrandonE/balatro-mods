@@ -1,8 +1,8 @@
 {
   "id": "BrandonE",
-  "name": "BrandonE's Jokers",
+  "name": "Brandon's Balatro Mod Collection",
   "author": ["BrandonE", "Various"],
-  "description": "BrandonE's Jokers and credited implementations of Joker ideas from various other players.",
+  "description": "BrandonE's mods and credited implementations of mod ideas from various other players.",
   "prefix": "BrandonE",
   "main_file": "BrandonE.lua",
   "dependencies": [

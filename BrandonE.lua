@@ -168,3 +168,48 @@ SMODS.Joker {
     end
   end
 }
+
+SMODS.Edition {
+  key = 'certified',
+  loc_txt = {
+    label = 'Certified',
+    name = 'Certified',
+    text = {
+      "{C:attention}#1# in #2#{} chance this Joker gains",
+      "{C:money}$#3#{} of {C:attention}sell value{} at end of round.",
+      "Can't be debuffed",
+      "{C:inactive}By u/BoxWari_"
+    }
+  },
+
+  config = { extra = { odds = 2, appreciation = 1 } },
+  unlocked = true,
+  discovered = true,
+  in_shop = true,
+  -- TODO: Determine if it's possible to implement certified.png as a shader.
+  shader = false,
+  -- shader = 'certified',
+  weight = 15,
+  loc_vars = function(self, info_queue, card)
+    return { vars = { (G.GAME.probabilities.normal or 1), self.config.extra.odds, self.config.extra.appreciation } }
+  end,
+  get_weight = function(self)
+    return G.GAME.edition_rate * self.weight
+  end,
+
+  calculate = function(self, card, context)
+    if context.before then
+      card:set_debuff(false) -- Doesn't work. TODO: Fix.
+    end
+
+    if context.end_of_round and not context.repetition and context.game_over == false and pseudorandom('certified') < G.GAME.probabilities.normal / self.config.extra.odds then
+      card.ability.extra_value = card.ability.extra_value + self.config.extra.appreciation
+      card:set_cost()
+
+      return {
+        message = localize('k_val_up'),
+        colour = G.C.MONEY
+      }
+    end
+  end
+}
