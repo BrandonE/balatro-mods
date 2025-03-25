@@ -70,7 +70,7 @@ SMODS.Joker {
       "This Joker gains {C:mult}X#2#{} Mult",
       "per consecutive hand played",
       "that sets the score on fire",
-      "{C:inactive}(Currently {C:mult}X#1#{})",
+      "{C:inactive}(Currently {X:mult,C:white}X#1#{}{C:inactive})",
       "{C:inactive}By u/Sample_text_here1337"
     }
   },
@@ -83,7 +83,7 @@ SMODS.Joker {
   pos = { x = 0, y = 0 },
   cost = 10,
   loc_vars = function(self, info_queue, card)
-  return { vars = { card.ability.extra.x_mult, card.ability.extra.x_mult_gain } }
+    return { vars = { card.ability.extra.x_mult, card.ability.extra.x_mult_gain } }
   end,
   calculate = function(self, card, context)
     if context.joker_main and card.ability.extra.x_mult > 1 then
@@ -119,7 +119,7 @@ SMODS.Joker {
 
       if score >= required_score and required_score > 0 then
         card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_mult_gain
-        return { message = "Upgraded!" }
+        return { message = localize('k_upgrade_ex') }
       elseif card.ability.extra.x_mult > 1 then
         card.ability.extra.x_mult = 1
         return { message = localize('k_reset') }
@@ -175,7 +175,7 @@ SMODS.Edition {
     label = 'Certified',
     name = 'Certified',
     text = {
-      "{C:attention}#1# in #2#{} chance this Joker gains",
+      "{C:green}#1# in #2#{} chance this Joker gains",
       "{C:money}$#3#{} of {C:attention}sell value{} at end of round.",
       "Can't be debuffed",
       "{C:inactive}By u/BoxWari_"
