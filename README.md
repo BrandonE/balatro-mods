@@ -1,13 +1,12 @@
 # Brandon's Balatro Mod Collection
-Mods for Balatro (https://www.playbalatro.com/)
+
+BrandonE's [Balatro](https://www.playbalatro.com/) mods and credited implementations of mod ideas from various other players.
 
 ## Modpacks
 
 [Sculio](https://github.com/crmykybord/Sculio)
 
 ## Jokers
-
-BrandonE's Jokers and credited implementations of Joker ideas from various other players.
 
 ### Dunce
 
